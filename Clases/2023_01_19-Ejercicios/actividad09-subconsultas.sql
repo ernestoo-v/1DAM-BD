@@ -61,8 +61,10 @@ FROM clientes
 WHERE id IN (SELECT id_cliente FROM ventas);
 
 
-/*  ERROR. FALTA CAMPO CIUDADES EN TABLA VENTAS.. Ejercicio: Obtener el nombre y la ciudad de todos los clientes que hayan realizado alguna compra en Madrid*/
-
+/*  ERROR (solucionado). FALTA CAMPO CIUDADES EN TABLA VENTAS.. Ejercicio: Obtener el nombre y la ciudad de todos los clientes que hayan realizado alguna compra en Madrid*/
+SELECT nombre, ciudad 
+FROM clientes
+WHERE id IN (SELECT id_cliente FROM ventas WHERE ciudad = 'Madrid');
 
 /* SI. Ejercicio: Obtener el nombre y el precio de todos los productos que no hayan sido comprados*/
 SELECT nombre, precio
@@ -92,13 +94,15 @@ FROM productos
 WHERE stock > (SELECT AVG(stock) FROM productos);
 
 /* ERROR. FALTA CAMPO CIUDADES EN TABLA VENTAS. Ejercicio: Obtener el nombre de los clientes que han realizado compras en todas las ciudades*/
+SELECT nombre
+FROM clientes
+WHERE id IN (SELECT id_cliente FROM ventas WHERE ciudad IN(SELECT DISTINCT ciudad FROM ventas) );
+/* Esta solucion devuelve el nombre de los clientes que han comprado en alguna de las ciudades de la tabla ventas, no en todas. */
 
 /* ¿REVISAR? SI Ejercicio: Obtener el nombre y el precio de los productos que han sido comprados por todos los clientes*/
 SELECT nombre, precio
 FROM productos
 WHERE (SELECT count(id_producto) FROM ventas) = (SELECT count(id_cliente) FROM ventas);
-
-/* ERROR. FALTA CAMPO CIUDADES EN TABLA VENTAS. Ejercicio: Obtener el nombre y la ciudad de los clientes que han realizado compras en todas las ciudades (de clientes)*/
 
 /* SI. Ejercicio: Obtener el nombre de los productos que han sido comprados por al menos un cliente de Madrid*/
 SELECT nombre
